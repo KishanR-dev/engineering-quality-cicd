@@ -19,6 +19,14 @@
 
 ---
 
+## Render Deployment
+
+This project includes a `render.yaml` blueprint for 1-click deployment to Render's free tier. 
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/KishanR-dev/engineering-quality-cicd)
+
+---
+
 ## Portfolio Architecture & Roadmap
 
 ServicePulse forms the foundation of a five-project Transformation Engineering portfolio:
@@ -177,19 +185,14 @@ As part of Project 2 engineering verification, a controlled defect scenario was 
 - **Scenario:** Inadvertent regression allowing transition from terminal `COMPLETED` state.
 - **Detection:** Caught automatically at CI test gate with zero false positives.
 - **Remediation:** Fix applied to domain logic + permanent regression test added.
-- **Documentation:** See [Controlled CI Failure Demo](docs/controlled-ci-failure-demo.md).
+- **Documentation:** See [Controlled CI Failure Demo](servicepulse/docs/controlled-ci-failure-demo.md).
 
 ---
 
-## Render Deployment
-
-This project includes a `render.yaml` blueprint for 1-click deployment to Render's free tier. 
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/KishanR-dev/engineering-quality-cicd)
-
+## Project Structure
 
 ```text
-.
+servicepulse/
 ├── .github/
 │   ├── dependabot.yml              # Automated dependency updates
 │   └── workflows/
@@ -226,19 +229,20 @@ This project includes a `render.yaml` blueprint for 1-click deployment to Render
 ```bash
 # 1. Clone repository
 git clone https://github.com/KishanR-dev/engineering-quality-cicd.git
+cd servicepulse
 
 # 2. Create virtual environment
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # 3. Install development dependencies
-pip install -r requirements-dev.txt
+pip install -r servicepulse/requirements-dev.txt
 
 # 4. Run local validation suite
 python scripts/run_checks.py all
 
 # 5. Start development server
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+cd servicepulse && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ---
@@ -247,14 +251,14 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 | Document | Purpose |
 |---|---|
-| [requirements.md](docs/requirements.md) | Functional and non-functional requirements |
-| [architecture.md](docs/architecture.md) | System architecture, layers, and data flow |
-| [api-design.md](docs/api-design.md) | REST API endpoints and data contracts |
-| [testing-strategy.md](docs/testing-strategy.md) | Test hierarchy, isolation, and coverage policy |
-| [controlled-ci-failure-demo.md](docs/controlled-ci-failure-demo.md) | Controlled failure & RCA demonstration |
-| [traceability-matrix.md](docs/traceability-matrix.md) | Requirement → Implementation → Test → CI mapping |
-| [observability.md](docs/observability.md) | Structured logging and Prometheus metrics |
-| [troubleshooting.md](docs/troubleshooting.md) | Operational triage procedures |
+| [requirements.md](servicepulse/docs/requirements.md) | Functional and non-functional requirements |
+| [architecture.md](servicepulse/docs/architecture.md) | System architecture, layers, and data flow |
+| [api-design.md](servicepulse/docs/api-design.md) | REST API endpoints and data contracts |
+| [testing-strategy.md](servicepulse/docs/testing-strategy.md) | Test hierarchy, isolation, and coverage policy |
+| [controlled-ci-failure-demo.md](servicepulse/docs/controlled-ci-failure-demo.md) | Controlled failure & RCA demonstration |
+| [traceability-matrix.md](servicepulse/docs/traceability-matrix.md) | Requirement → Implementation → Test → CI mapping |
+| [observability.md](servicepulse/docs/observability.md) | Structured logging and Prometheus metrics |
+| [troubleshooting.md](servicepulse/docs/troubleshooting.md) | Operational triage procedures |
 
 ---
 
