@@ -181,7 +181,12 @@ As part of Project 2 engineering verification, a controlled defect scenario was 
 
 ---
 
-## Project Structure
+## Render Deployment
+
+This project includes a `render.yaml` blueprint for 1-click deployment to Render's free tier. 
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/KishanR-dev/engineering-quality-cicd)
+
 
 ```text
 .
