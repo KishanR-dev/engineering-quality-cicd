@@ -4,20 +4,19 @@ FastAPI application setup with middleware, routes, and startup/shutdown hooks.
 """
 
 import time
+from datetime import UTC, datetime
 
-from datetime import datetime, timezone
 from fastapi import FastAPI, Request, Response, status
-from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.api.routes import requests, incidents, metrics
+from app.api.routes import incidents, metrics, requests
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
-from app.core.logging import setup_logging, get_logger
-from app.core.metrics import MetricsCollector, metrics as metrics_collector
-from app.db.database import init_db, get_db
+from app.core.logging import get_logger, setup_logging
+from app.core.metrics import metrics as metrics_collector
+from app.db.database import init_db
 
 logger = get_logger("main")
 
@@ -35,7 +34,7 @@ app = FastAPI(
 # Health endpoint (defined here to avoid import ordering issues)
 # ---------------------------------------------------------------------------
 
-from fastapi import Depends
+from fastapi import Depends  # noqa: E402
 
 
 def get_health_db() -> Session:
@@ -48,7 +47,8 @@ def get_health_db() -> Session:
 
 
 # Import SessionLocal for health check dependency
-from app.db.database import SessionLocal
+from app.db.database import SessionLocal  # noqa: E402
+
 
 @app.get(
     "/health",
@@ -78,7 +78,7 @@ def health_check(response: Response, db: Session = Depends(get_health_db)):
         "status": overall,
         "version": _settings.app_version,
         "environment": _settings.app_env,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "components": components,
     }
 

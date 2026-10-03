@@ -1,10 +1,10 @@
 """Service layer for incident lifecycle operations."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
 
-from app.core.errors import NotFoundError, DatabaseError
+from app.core.errors import DatabaseError, NotFoundError
 from app.core.logging import get_logger
 from app.core.metrics import metrics
 from app.db.models import IncidentModel
@@ -70,7 +70,7 @@ class IncidentService:
     def update_incident(self, incident_id: str, data: UpdateIncidentSchema) -> IncidentModel:
         """Update incident fields. If status is provided, validate the transition."""
         model = self.get_incident(incident_id)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
 
         if data.status is not None:
             current = IncidentStatus(model.status)

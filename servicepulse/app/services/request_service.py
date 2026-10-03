@@ -4,11 +4,11 @@ Orchestrates domain logic, persistence, logging, and metrics.
 Business logic lives here — not in route handlers or repositories.
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
 
-from app.core.errors import NotFoundError, DatabaseError
+from app.core.errors import DatabaseError, NotFoundError
 from app.core.logging import get_logger
 from app.core.metrics import metrics
 from app.db.models import ServiceRequestModel
@@ -84,7 +84,7 @@ class RequestService:
         # Domain validation — raises InvalidStateTransitionError on violation
         validate_request_transition(current, target_status)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         old_status = model.status
         model.status = target_status.value
         model.updated_at = now

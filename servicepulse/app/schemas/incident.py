@@ -9,7 +9,6 @@ from pydantic import BaseModel, Field
 from app.domain.enums import IncidentSeverity, IncidentStatus
 from app.schemas.common import PaginatedResponse
 
-
 # -- Input schemas --
 
 class CreateIncidentSchema(BaseModel):

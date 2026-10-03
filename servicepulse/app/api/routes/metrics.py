@@ -8,11 +8,11 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 
-from app.core.metrics import MetricsCollector, metrics as metrics_collector
+from app.core.metrics import metrics as metrics_collector
 from app.db.database import get_db
-from app.repositories.request_repository import RequestRepository
+from app.domain.enums import IncidentStatus, RequestStatus
 from app.repositories.incident_repository import IncidentRepository
-from app.domain.enums import RequestStatus, IncidentStatus
+from app.repositories.request_repository import RequestRepository
 
 router = APIRouter(tags=["Metrics"])
 

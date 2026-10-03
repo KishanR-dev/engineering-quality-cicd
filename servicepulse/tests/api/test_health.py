@@ -1,7 +1,5 @@
 """API tests for health endpoint."""
 
-import pytest
-
 
 class TestHealthCheck:
     def test_health_success(self, client):

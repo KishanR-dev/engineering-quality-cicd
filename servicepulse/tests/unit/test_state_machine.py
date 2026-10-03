@@ -2,9 +2,9 @@
 
 import pytest
 
-from app.domain.enums import RequestStatus, IncidentStatus
-from app.domain.request import validate_request_transition, InvalidStateTransitionError
+from app.domain.enums import IncidentStatus, RequestStatus
 from app.domain.incident import validate_incident_transition
+from app.domain.request import InvalidStateTransitionError, validate_request_transition
 
 
 class TestRequestStateMachine:

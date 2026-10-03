@@ -10,8 +10,6 @@ IMPORTANT: Failure simulation is ONLY active when:
 This is a SAFETY GUARD to prevent accidental failures in production.
 """
 
-import pytest
-
 
 class TestFailureSimulationGate:
     """Test that failure simulation is properly gated."""

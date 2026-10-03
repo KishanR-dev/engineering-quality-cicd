@@ -10,7 +10,6 @@ from pydantic import BaseModel, Field, field_validator
 from app.domain.enums import RequestStatus, RequestType
 from app.schemas.common import PaginatedResponse
 
-
 # -- Input schemas --
 
 class CreateRequestSchema(BaseModel):

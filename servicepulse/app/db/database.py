@@ -4,7 +4,7 @@ Designed for SQLite initially; switch to PostgreSQL by changing DATABASE_URL.
 """
 
 from sqlalchemy import create_engine, event
-from sqlalchemy.orm import DeclarativeBase, sessionmaker, Session
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from app.core.config import get_settings
 

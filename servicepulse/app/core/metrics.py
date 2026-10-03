@@ -10,8 +10,8 @@ from __future__ import annotations
 import threading
 import time
 from collections import defaultdict
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
 
 
 class MetricsCollector:

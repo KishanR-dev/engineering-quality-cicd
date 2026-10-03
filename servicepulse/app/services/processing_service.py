@@ -8,7 +8,7 @@ import random
 import time
 
 from app.core.config import get_settings
-from app.core.errors import ProcessingError, FailureSimulationError
+from app.core.errors import FailureSimulationError, ProcessingError
 from app.core.logging import get_logger
 from app.core.metrics import metrics
 

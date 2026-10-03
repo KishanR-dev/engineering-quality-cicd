@@ -1,7 +1,5 @@
 """API tests for metrics endpoint."""
 
-import pytest
-
 
 class TestMetrics:
     def test_metrics_endpoint_returns_text(self, client):

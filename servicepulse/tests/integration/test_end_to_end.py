@@ -1,7 +1,5 @@
 """End-to-end integration tests for the request lifecycle."""
 
-import pytest
-
 from app.domain.enums import RequestStatus
 
 

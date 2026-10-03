@@ -3,14 +3,14 @@
 Reports component-level health status. Returns 503 if any component is unhealthy.
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app.db.database import get_db
 from app.core.config import get_settings
+from app.db.database import get_db
 
 router = APIRouter(tags=["Health"])
 
@@ -44,6 +44,6 @@ def health_check(response: Response, db: Session = Depends(get_db)):
         "status": overall,
         "version": settings.app_version,
         "environment": settings.app_env,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "components": components,
     }

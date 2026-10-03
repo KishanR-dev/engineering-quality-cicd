@@ -1,7 +1,5 @@
 """API tests for service request endpoints."""
 
-import pytest
-
 from app.domain.enums import RequestStatus
 
 
