@@ -13,4 +13,4 @@ if __name__ == "__main__":
     import subprocess
 
     cmd = [sys.executable, TARGET_SCRIPT] + sys.argv[1:]
-    sys.exit(subprocess.run(cmd).returncode)
+    sys.exit(subprocess.call(cmd))
