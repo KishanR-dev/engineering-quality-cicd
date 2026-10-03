@@ -28,7 +28,9 @@ In `app/domain/request.py`, a developer inadvertently modified the `validate_req
 VALID_REQUEST_TRANSITIONS: dict[RequestStatus, set[RequestStatus]] = {
     RequestStatus.RECEIVED: {RequestStatus.PROCESSING, RequestStatus.FAILED},
     RequestStatus.PROCESSING: {RequestStatus.COMPLETED, RequestStatus.FAILED},
-    RequestStatus.COMPLETED: {RequestStatus.PROCESSING},  # <-- DEFECT: Breaks immutability of terminal state!
+    RequestStatus.COMPLETED: {
+        RequestStatus.PROCESSING
+    },  # <-- DEFECT: Breaks immutability of terminal state!
     RequestStatus.FAILED: set(),
 }
 ```
@@ -93,7 +95,7 @@ VALID_REQUEST_TRANSITIONS: dict[RequestStatus, set[RequestStatus]] = {
     RequestStatus.RECEIVED: {RequestStatus.PROCESSING, RequestStatus.FAILED},
     RequestStatus.PROCESSING: {RequestStatus.COMPLETED, RequestStatus.FAILED},
     RequestStatus.COMPLETED: set(),  # Correct: Strictly terminal state
-    RequestStatus.FAILED: set(),     # Correct: Strictly terminal state
+    RequestStatus.FAILED: set(),  # Correct: Strictly terminal state
 }
 ```
 
@@ -105,7 +107,9 @@ A dedicated parametrized regression test was codified in `tests/regression/test_
 class TestTerminalStateImmutabilityRegression:
     """Regression test: Ensure terminal states cannot be escaped or overwritten."""
 
-    @pytest.mark.parametrize("target_status", [RequestStatus.RECEIVED, RequestStatus.PROCESSING, RequestStatus.FAILED])
+    @pytest.mark.parametrize(
+        "target_status", [RequestStatus.RECEIVED, RequestStatus.PROCESSING, RequestStatus.FAILED]
+    )
     def test_request_completed_state_is_strictly_terminal(self, target_status):
         with pytest.raises(InvalidStateTransitionError):
             validate_request_transition(RequestStatus.COMPLETED, target_status)

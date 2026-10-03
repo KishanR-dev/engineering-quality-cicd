@@ -34,6 +34,7 @@ Test coverage should provide confidence in:
 def test_valid_received_to_processing():
     validate_request_transition(RequestStatus.RECEIVED, RequestStatus.PROCESSING)
 
+
 def test_invalid_state_transition_raises_error():
     with pytest.raises(InvalidStateTransitionError):
         validate_request_transition(RequestStatus.COMPLETED, RequestStatus.PROCESSING)
