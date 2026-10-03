@@ -13,9 +13,9 @@
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](#containerization--smoke-testing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-🔗 **[Live Demo State: Unavailable]** · 📖 **[API Documentation](/api/v1/docs)**
+🔗 **[Live API Documentation & Demo](https://engineering-quality-cicd-dhlf.onrender.com/docs)**
 
-> **Note:** Hugging Face Docker and Gradio deployment on the `cpu-basic` hardware tier requires a PRO subscription. The project remains fully containerized and can be deployed to any compatible Docker host.
+> **Note:** The live demonstration is hosted on Render's free tier. It may take roughly 30-50 seconds to spin up from sleep if it hasn't received traffic recently. Hugging Face Docker deployment remains unavailable under the free tier.
 
 ---
 
