@@ -11,6 +11,7 @@ from app.core.config import get_settings
 
 class Base(DeclarativeBase):
     """Declarative base for all ORM models."""
+
     pass
 
 
@@ -23,6 +24,7 @@ def _build_engine(database_url: str):
 
     # Enable WAL mode and foreign keys for SQLite
     if database_url.startswith("sqlite"):
+
         @event.listens_for(engine, "connect")
         def _set_sqlite_pragma(dbapi_conn, _connection_record):
             cursor = dbapi_conn.cursor()
@@ -53,4 +55,5 @@ def get_db() -> Session:
 def init_db() -> None:
     """Create all tables. Called on application startup."""
     from app.db import models  # noqa: F401 — ensure models are imported
+
     Base.metadata.create_all(bind=engine)

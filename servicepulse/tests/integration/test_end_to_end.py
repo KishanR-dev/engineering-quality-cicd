@@ -1,8 +1,11 @@
 """End-to-end integration tests for the request lifecycle."""
 
+import pytest
+
 from app.domain.enums import RequestStatus
 
 
+@pytest.mark.integration
 class TestRequestLifecycle:
     """Test complete request lifecycle from creation to completion."""
 
@@ -59,6 +62,7 @@ class TestRequestLifecycle:
         assert data["failure_reason"] == "Connection timeout"
 
 
+@pytest.mark.integration
 class TestIncidentLifecycle:
     """Test incident creation and resolution."""
 

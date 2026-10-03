@@ -33,9 +33,7 @@ class ServiceRequestModel(Base):
     failed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     failure_reason: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
-    __table_args__ = (
-        Index("ix_service_request_customer_status", "customer_id", "status"),
-    )
+    __table_args__ = (Index("ix_service_request_customer_status", "customer_id", "status"),)
 
 
 class IncidentModel(Base):

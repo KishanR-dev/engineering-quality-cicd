@@ -90,6 +90,15 @@ class MetricsCollector:
                 lines.append(f"{name}_avg{label_str} {avg:.2f}")
         return "\n".join(lines) + "\n"
 
+    # -- Reset --
+
+    def reset(self) -> None:
+        """Clear all in-memory metrics. Used for test isolation and state reset."""
+        with self._lock:
+            self._counters.clear()
+            self._gauges.clear()
+            self._histograms.clear()
+
     # -- Snapshot for JSON endpoint --
 
     def snapshot(self) -> dict:

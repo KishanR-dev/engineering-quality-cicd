@@ -65,7 +65,9 @@ class RequestService:
             raise NotFoundError("request", request_id)
         return model
 
-    def list_requests(self, skip: int = 0, limit: int = 20) -> tuple[list[ServiceRequestModel], int]:
+    def list_requests(
+        self, skip: int = 0, limit: int = 20
+    ) -> tuple[list[ServiceRequestModel], int]:
         """Return a paginated list of requests and total count."""
         items = self.repo.list_requests(skip=skip, limit=limit)
         total = self.repo.count()

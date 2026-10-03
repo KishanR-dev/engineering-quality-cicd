@@ -1,8 +1,11 @@
 """API tests for service request endpoints."""
 
+import pytest
+
 from app.domain.enums import RequestStatus
 
 
+@pytest.mark.api
 class TestCreateRequest:
     def test_create_request_success(self, client, sample_request_data):
         response = client.post("/api/v1/requests", json=sample_request_data)
@@ -14,27 +17,37 @@ class TestCreateRequest:
 
     def test_create_request_missing_fields(self, client, sample_request_data):
         # Missing customer_id
-        response = client.post("/api/v1/requests", json={
-            "request_type": "SERVICE",
-            "description": "Test",
-        })
+        response = client.post(
+            "/api/v1/requests",
+            json={
+                "request_type": "SERVICE",
+                "description": "Test",
+            },
+        )
         assert response.status_code == 422
 
     def test_create_request_invalid_customer_id(self, client, sample_request_data):
-        response = client.post("/api/v1/requests", json={
-            **sample_request_data,
-            "customer_id": "INVALID",
-        })
+        response = client.post(
+            "/api/v1/requests",
+            json={
+                **sample_request_data,
+                "customer_id": "INVALID",
+            },
+        )
         assert response.status_code == 422
 
     def test_create_request_invalid_type(self, client, sample_request_data):
-        response = client.post("/api/v1/requests", json={
-            **sample_request_data,
-            "request_type": "INVALID",
-        })
+        response = client.post(
+            "/api/v1/requests",
+            json={
+                **sample_request_data,
+                "request_type": "INVALID",
+            },
+        )
         assert response.status_code == 422
 
 
+@pytest.mark.api
 class TestGetRequest:
     def test_get_request_success(self, client, sample_request_data):
         # Create first
@@ -52,6 +65,7 @@ class TestGetRequest:
         assert response.status_code == 404
 
 
+@pytest.mark.api
 class TestListRequests:
     def test_list_requests_empty(self, client):
         response = client.get("/api/v1/requests")
@@ -72,6 +86,7 @@ class TestListRequests:
         assert len(data["items"]) == 3
 
 
+@pytest.mark.api
 class TestUpdateStatus:
     def test_update_status_success(self, client, sample_request_data):
         create_resp = client.post("/api/v1/requests", json=sample_request_data)

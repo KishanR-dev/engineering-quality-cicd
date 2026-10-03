@@ -1,13 +1,5 @@
-"""Route modules.
+"""Route modules."""
 
-Each route module should have a `register(app)` function that adds routes to the FastAPI app.
-This allows for circular import-free routing.
-"""
+from app.api.routes import health, incidents, metrics, requests
 
-def register_all(app):
-    """Register all route modules to the app."""
-    from app.api.routes import health, incidents, metrics, requests
-    app.include_router(health.router)
-    app.include_router(requests.router, prefix="/api/v1")
-    app.include_router(incidents.router, prefix="/api/v1")
-    app.include_router(metrics.router, prefix="/api/v1")
+__all__ = ["health", "incidents", "metrics", "requests"]

@@ -1,0 +1,163 @@
+name: ServicePulse CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  # -------------------------------------------------------------------------
+  # Stage 1: Static Quality & Linting
+  # -------------------------------------------------------------------------
+  lint:
+    name: Code Quality (Ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+
+      - name: Run Ruff Linting
+        run: |
+          ruff check .
+
+      - name: Run Ruff Formatting Check
+        run: |
+          ruff format --check .
+
+  # -------------------------------------------------------------------------
+  # Stage 2: Security & Supply Chain Audit
+  # -------------------------------------------------------------------------
+  security:
+    name: Security & Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install security audit tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit bandit
+
+      - name: Audit dependencies for known vulnerabilities (pip-audit)
+        run: |
+          pip-audit -r servicepulse/requirements.txt
+
+      - name: Static Application Security Testing (Bandit)
+        run: |
+          bandit -r servicepulse/app -ll -ii
+
+  # -------------------------------------------------------------------------
+  # Stage 3: Automated Tests & Coverage Validation
+  # -------------------------------------------------------------------------
+  test:
+    name: Tests & Coverage (pytest)
+    runs-on: ubuntu-latest
+    needs: [lint, security]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r servicepulse/requirements-dev.txt
+
+      - name: Run full test suite with coverage enforcement (>= 85%)
+        working-directory: servicepulse
+        run: |
+          pytest tests/ \
+            --cov=app \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            --cov-fail-under=85 \
+            -v
+
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: servicepulse/coverage.xml
+          retention-days: 14
+
+  # -------------------------------------------------------------------------
+  # Stage 4: Docker Build & Container Smoke Test
+  # -------------------------------------------------------------------------
+  docker:
+    name: Docker Build & Smoke Test
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: servicepulse
+          file: servicepulse/Dockerfile
+          load: true
+          tags: servicepulse:ci-test
+
+      - name: Start container instance
+        run: |
+          docker run -d \
+            --name servicepulse-ci \
+            -p 8000:8000 \
+            -e APP_ENV=development \
+            -e PORT=8000 \
+            servicepulse:ci-test
+
+      - name: Set up Python for smoke testing
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run live API and Container Smoke Tests
+        run: |
+          python servicepulse/scripts/smoke_test.py \
+            --base-url http://localhost:8000 \
+            --wait \
+            --timeout 30
+
+      - name: Inspect container logs on failure
+        if: failure()
+        run: |
+          docker logs servicepulse-ci
+
+      - name: Clean up container
+        if: always()
+        run: |
+          docker rm -f servicepulse-ci || true

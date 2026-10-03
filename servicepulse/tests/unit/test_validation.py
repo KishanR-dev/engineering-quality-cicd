@@ -2,9 +2,12 @@
 
 import pytest
 
+from app.domain.enums import IncidentSeverity, IncidentStatus
+from app.schemas.incident import CreateIncidentSchema, UpdateIncidentSchema
 from app.schemas.request import CreateRequestSchema
 
 
+@pytest.mark.unit
 class TestCreateRequestValidation:
     def test_valid_request(self):
         data = CreateRequestSchema(
@@ -62,3 +65,65 @@ class TestCreateRequestValidation:
                 request_type="INVALID",
                 description="Test",
             )
+
+
+@pytest.mark.unit
+class TestCreateIncidentValidation:
+    def test_valid_incident(self):
+        data = CreateIncidentSchema(
+            title="Database Latency Spike",
+            description="High latency on SQL queries",
+            severity=IncidentSeverity.HIGH,
+            affected_service="database",
+        )
+        assert data.title == "Database Latency Spike"
+        assert data.severity == IncidentSeverity.HIGH
+
+    def test_empty_title(self):
+        with pytest.raises(ValueError):
+            CreateIncidentSchema(
+                title="",
+                description="High latency on SQL queries",
+                severity=IncidentSeverity.HIGH,
+            )
+
+    def test_title_too_long(self):
+        with pytest.raises(ValueError):
+            CreateIncidentSchema(
+                title="x" * 201,
+                description="High latency on SQL queries",
+                severity=IncidentSeverity.HIGH,
+            )
+
+    def test_empty_description(self):
+        with pytest.raises(ValueError):
+            CreateIncidentSchema(
+                title="Incident",
+                description="",
+                severity=IncidentSeverity.HIGH,
+            )
+
+    def test_invalid_severity(self):
+        with pytest.raises(ValueError):
+            CreateIncidentSchema(
+                title="Incident",
+                description="Description",
+                severity="CRITICAL_EXTREME",  # Invalid enum
+            )
+
+
+@pytest.mark.unit
+class TestUpdateIncidentValidation:
+    def test_valid_status_update(self):
+        data = UpdateIncidentSchema(
+            status=IncidentStatus.INVESTIGATING,
+            root_cause="Connection pool exhaustion",
+            remediation="Increased max pool size to 50",
+            prevention="Add connection pool saturation alert",
+        )
+        assert data.status == IncidentStatus.INVESTIGATING
+        assert data.root_cause == "Connection pool exhaustion"
+
+    def test_invalid_status(self):
+        with pytest.raises(ValueError):
+            UpdateIncidentSchema(status="NOT_A_STATUS")

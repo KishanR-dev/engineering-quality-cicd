@@ -31,7 +31,10 @@ ENV PYTHONPATH=/app
 ENV APP_ENV=production
 ENV DATABASE_URL=sqlite:////app/data/servicepulse.db
 
-# Port is configurable via environment variable (default 7860 for Hugging Face Spaces)
-EXPOSE 7860
+# Port is configurable via environment variable (default 8000 for standard API)
+EXPOSE 8000 7860
 
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860}"]
+HEALTHCHECK --interval=15s --timeout=5s --start-period=5s --retries=3 \
+  CMD python -c "import urllib.request, os; urllib.request.urlopen('http://localhost:' + os.environ.get('PORT', '8000') + '/health')" || exit 1
+
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

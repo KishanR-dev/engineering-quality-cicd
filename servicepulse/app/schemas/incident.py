@@ -11,6 +11,7 @@ from app.schemas.common import PaginatedResponse
 
 # -- Input schemas --
 
+
 class CreateIncidentSchema(BaseModel):
     """Input for creating a new incident."""
 
@@ -31,6 +32,7 @@ class UpdateIncidentSchema(BaseModel):
 
 
 # -- Output schemas --
+
 
 class IncidentResponse(BaseModel):
     """Full incident response."""
@@ -55,4 +57,5 @@ class IncidentResponse(BaseModel):
 
 class IncidentListResponse(PaginatedResponse):
     """Paginated list of incidents."""
+
     items: list[IncidentResponse]

@@ -17,11 +17,7 @@ class IncidentRepository:
         return model
 
     def get_by_incident_id(self, incident_id: str) -> IncidentModel | None:
-        return (
-            self.db.query(IncidentModel)
-            .filter(IncidentModel.incident_id == incident_id)
-            .first()
-        )
+        return self.db.query(IncidentModel).filter(IncidentModel.incident_id == incident_id).first()
 
     def list_incidents(self, skip: int = 0, limit: int = 20) -> list[IncidentModel]:
         return (

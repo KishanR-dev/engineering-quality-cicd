@@ -10,7 +10,10 @@ IMPORTANT: Failure simulation is ONLY active when:
 This is a SAFETY GUARD to prevent accidental failures in production.
 """
 
+import pytest
 
+
+@pytest.mark.failure
 class TestFailureSimulationGate:
     """Test that failure simulation is properly gated."""
 
@@ -23,6 +26,7 @@ class TestFailureSimulationGate:
         # (simulation requires explicit opt-in in development mode)
 
 
+@pytest.mark.failure
 class TestProcessingFailurePath:
     """Test that the request processing failure path works."""
 
@@ -40,10 +44,7 @@ class TestProcessingFailurePath:
         # Now fail it with a reason
         fail_resp = client.patch(
             f"/api/v1/requests/{request_id}/status",
-            json={
-                "status": "FAILED",
-                "failure_reason": "Simulated database timeout for testing"
-            },
+            json={"status": "FAILED", "failure_reason": "Simulated database timeout for testing"},
         )
         assert fail_resp.status_code == 200
         data = fail_resp.json()
@@ -51,6 +52,7 @@ class TestProcessingFailurePath:
         assert data["failure_reason"] == "Simulated database timeout for testing"
 
 
+@pytest.mark.failure
 class TestInvalidStatePrevention:
     """Verify that invalid state transitions are rejected."""
 

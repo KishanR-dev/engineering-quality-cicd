@@ -12,6 +12,7 @@ from app.schemas.common import PaginatedResponse
 
 # -- Input schemas --
 
+
 class CreateRequestSchema(BaseModel):
     """Input for creating a new service request."""
 
@@ -60,6 +61,7 @@ class UpdateStatusSchema(BaseModel):
 
 # -- Output schemas --
 
+
 class RequestResponse(BaseModel):
     """Full service request response."""
 
@@ -80,4 +82,5 @@ class RequestResponse(BaseModel):
 
 class RequestListResponse(PaginatedResponse):
     """Paginated list of service requests."""
+
     items: list[RequestResponse]

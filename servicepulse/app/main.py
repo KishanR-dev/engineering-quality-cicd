@@ -4,14 +4,13 @@ FastAPI application setup with middleware, routes, and startup/shutdown hooks.
 """
 
 import time
-from datetime import UTC, datetime
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request, Response, status
-from sqlalchemy import text
-from sqlalchemy.orm import Session
+from fastapi import FastAPI, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.api.routes import incidents, metrics, requests
+from app.api.routes import health, incidents, metrics, requests
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
 from app.core.logging import get_logger, setup_logging
@@ -22,79 +21,49 @@ logger = get_logger("main")
 
 _settings = get_settings()
 
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
+    """Lifespan context manager for application startup and shutdown."""
+    setup_logging(_settings.log_level)
+    logger.info(
+        "Starting application",
+        extra={"event": "APP_STARTUP", "environment": _settings.app_env},
+    )
+    init_db()
+    metrics_collector.increment("app_startup_total")
+    yield
+    logger.info(
+        "Shutting down",
+        extra={"event": "APP_SHUTDOWN", "environment": _settings.app_env},
+    )
+
+
 app = FastAPI(
     title=_settings.app_name,
     version=_settings.app_version,
     description=_settings.app_name,
     redoc_url=None,
+    lifespan=lifespan,
 )
-
-
-# ---------------------------------------------------------------------------
-# Health endpoint (defined here to avoid import ordering issues)
-# ---------------------------------------------------------------------------
-
-from fastapi import Depends  # noqa: E402
-
-
-def get_health_db() -> Session:
-    """Get a database session for health checks."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-# Import SessionLocal for health check dependency
-from app.db.database import SessionLocal  # noqa: E402
-
-
-@app.get(
-    "/health",
-    summary="System health check",
-    description="Returns health status of the application and its dependencies.",
-    responses={
-        200: {"description": "All components healthy"},
-        503: {"description": "One or more components unhealthy"},
-    },
-)
-def health_check(response: Response, db: Session = Depends(get_health_db)):
-    components = {"application": "healthy"}
-
-    # Database connectivity check
-    try:
-        db.execute(text("SELECT 1"))
-        components["database"] = "healthy"
-    except Exception:
-        components["database"] = "unhealthy"
-
-    overall = "healthy" if all(v == "healthy" for v in components.values()) else "unhealthy"
-
-    if overall != "healthy":
-        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-
-    return {
-        "status": overall,
-        "version": _settings.app_version,
-        "environment": _settings.app_env,
-        "timestamp": datetime.now(UTC).isoformat(),
-        "components": components,
-    }
 
 
 # ---------------------------------------------------------------------------
 # Middleware
 # ---------------------------------------------------------------------------
 
+
 class CorrelationIdMiddleware(BaseHTTPMiddleware):
     """Assign correlation IDs to requests and pass them through."""
 
     async def dispatch(self, request: Request, call_next):
         # Prefer client-supplied ID, otherwise generate one
-        correlation_id = request.headers.get("X-Correlation-ID") or request.headers.get("X-Request-ID")
+        correlation_id = request.headers.get("X-Correlation-ID") or request.headers.get(
+            "X-Request-ID"
+        )
         if not correlation_id:
             import uuid
+
             correlation_id = str(uuid.uuid4())[:8]
 
         request.state.correlation_id = correlation_id
@@ -171,32 +140,10 @@ register_error_handlers(app)
 
 
 # ---------------------------------------------------------------------------
-# Startup / Shutdown
-# ---------------------------------------------------------------------------
-
-@app.on_event("startup")
-def on_startup():
-    setup_logging(_settings.log_level)
-    logger.info(
-        "Starting application",
-        extra={"event": "APP_STARTUP", "environment": _settings.app_env},
-    )
-    init_db()
-    metrics_collector.increment("app_startup_total")
-
-
-@app.on_event("shutdown")
-def on_shutdown():
-    logger.info(
-        "Shutting down",
-        extra={"event": "APP_SHUTDOWN", "environment": _settings.app_env},
-    )
-
-
-# ---------------------------------------------------------------------------
 # API Routes
 # ---------------------------------------------------------------------------
 
+app.include_router(health.router)
 app.include_router(requests.router, prefix="/api/v1")
 app.include_router(incidents.router, prefix="/api/v1")
 app.include_router(metrics.router, prefix="/api/v1")

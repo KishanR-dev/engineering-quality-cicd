@@ -85,8 +85,8 @@ class ProcessingService:
         - APP_ENV=development
         - FAILURE_SIMULATION_ENABLED=true
         """
-        # 30% chance of simulated processing failure
-        if random.random() < 0.3:  # noqa: S311 — not security-sensitive
+        # 30% chance of simulated processing failure (simulation only)
+        if random.random() < 0.3:  # nosec B311
             logger.warning(
                 "SIMULATED FAILURE — DEVELOPMENT ENVIRONMENT",
                 extra={

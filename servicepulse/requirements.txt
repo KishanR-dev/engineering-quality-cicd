@@ -1,20 +1,7 @@
-# ServicePulse Requirements
-# Core application dependencies
-
-fastapi==0.115.12
+# ServicePulse Core Runtime Requirements
+fastapi==0.142.2
 uvicorn[standard]==0.34.3
 pydantic==2.11.4
 pydantic-settings==2.9.1
 sqlalchemy==2.0.41
-python-dotenv==1.1.0
-
-# Testing
-pytest==8.4.1
-pytest-cov==6.2.1
-httpx==0.28.1
-
-# Code quality
-ruff==0.11.12
-
-# Hugging Face Spaces deployment
-gradio==6.26.0
+python-dotenv==1.2.4

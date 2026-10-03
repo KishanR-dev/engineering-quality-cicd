@@ -1,6 +1,9 @@
 """API tests for health endpoint."""
 
+import pytest
 
+
+@pytest.mark.api
 class TestHealthCheck:
     def test_health_success(self, client):
         response = client.get("/health")

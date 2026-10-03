@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 # Exception hierarchy
 # ---------------------------------------------------------------------------
 
+
 class ServicePulseError(Exception):
     """Base exception for all application errors."""
 
@@ -64,6 +65,7 @@ class FailureSimulationError(ServicePulseError):
 # ---------------------------------------------------------------------------
 # FastAPI exception handlers
 # ---------------------------------------------------------------------------
+
 
 def _build_error_body(error: ServicePulseError, correlation_id: str | None) -> dict:
     body: dict = {"code": error.code, "message": error.message}

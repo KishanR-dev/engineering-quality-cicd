@@ -1,0 +1,64 @@
+name: ServicePulse Release Validation & Artifacts
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  validate-release:
+    name: Full Release Quality Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r servicepulse/requirements-dev.txt
+
+      - name: Verify Version Consistency
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          PYPROJECT_VERSION=$(python -c "import tomllib; print(tomllib.load(open('servicepulse/pyproject.toml', 'rb'))['project']['version'])")
+          CONFIG_VERSION=$(python -c "import sys; sys.path.insert(0, 'servicepulse'); from app.core.config import get_settings; print(get_settings().app_version)")
+
+          echo "Release Tag: ${TAG_VERSION}"
+          echo "pyproject.toml: ${PYPROJECT_VERSION}"
+          echo "config.py: ${CONFIG_VERSION}"
+
+          if [ "${TAG_VERSION}" != "${PYPROJECT_VERSION}" ] || [ "${TAG_VERSION}" != "${CONFIG_VERSION}" ]; then
+            echo "ERROR: Version mismatch between tag (${TAG_VERSION}), pyproject.toml (${PYPROJECT_VERSION}), and config.py (${CONFIG_VERSION})"
+            exit 1
+          fi
+
+      - name: Full Quality Suite (Lint, Security, Coverage)
+        working-directory: servicepulse
+        run: |
+          ruff check .
+          ruff format --check .
+          pip-audit -r requirements.txt
+          bandit -r app -ll -ii
+          pytest tests/ --cov=app --cov-report=term-missing --cov-fail-under=85 -v
+
+      - name: Build Source and Wheel Distribution
+        run: |
+          pip install build
+          cd servicepulse && python -m build
+
+      - name: Upload Release Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: servicepulse-dist-${{ github.ref_name }}
+          path: servicepulse/dist/
+          retention-days: 30

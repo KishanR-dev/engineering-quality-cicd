@@ -7,6 +7,7 @@ from app.domain.incident import validate_incident_transition
 from app.domain.request import InvalidStateTransitionError, validate_request_transition
 
 
+@pytest.mark.unit
 class TestRequestStateMachine:
     """Tests for service request state transitions."""
 
@@ -48,6 +49,7 @@ class TestRequestStateMachine:
                     validate_request_transition(RequestStatus.FAILED, target)
 
 
+@pytest.mark.unit
 class TestIncidentStateMachine:
     """Tests for incident state transitions."""
 

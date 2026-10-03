@@ -18,8 +18,17 @@ class StructuredFormatter(logging.Formatter):
         }
 
         # Attach structured extras if present
-        for key in ("event", "correlation_id", "request_id", "endpoint", "method",
-                     "status_code", "duration_ms", "error", "detail"):
+        for key in (
+            "event",
+            "correlation_id",
+            "request_id",
+            "endpoint",
+            "method",
+            "status_code",
+            "duration_ms",
+            "error",
+            "detail",
+        ):
             value = getattr(record, key, None)
             if value is not None:
                 log_entry[key] = value
