@@ -349,7 +349,7 @@ with gr.Blocks(title="ServicePulse Demo") as demo:
         demo.load(get_requests_table_data, outputs=table_out)
 
     gr.Markdown("---")
-    gr.Markdown("*ServicePulse v1.1.0 — Production Operations & Incident Management Platform*")
+    gr.Markdown("*ServicePulse v1.2.1 — Production Operations & Incident Management Platform*")
 
 if __name__ == "__main__":
     demo.launch()
