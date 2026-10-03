@@ -207,5 +207,7 @@ def root():
     return {
         "service": _settings.app_name,
         "version": _settings.app_version,
-        "docs": "/api/v1/docs" if _settings.app_env == "development" else None,
+        "status": "running",
+        "docs": "/docs",
+        "health": "/health",
     }
