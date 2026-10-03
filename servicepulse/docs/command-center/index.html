@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformation Engineering Command Center</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --success: #22c55e;
+            --fail: #ef4444;
+            --warning: #eab308;
+            --stale: #64748b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-PASS { background-color: rgba(34, 197, 94, 0.2); color: var(--success); }
+        .status-FAIL { background-color: rgba(239, 68, 68, 0.2); color: var(--fail); }
+        .status-DEGRADED, .status-WARNING { background-color: rgba(234, 179, 8, 0.2); color: var(--warning); }
+        .status-UNKNOWN, .status-STALE { background-color: rgba(100, 116, 139, 0.2); color: var(--stale); }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-box {
+            background-color: rgba(15, 23, 42, 0.5);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        tr:hover td {
+            background-color: var(--bg-card-hover);
+        }
+
+        .limitations {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--warning);
+            border-left: 4px solid var(--warning);
+            padding-left: 0.75rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .benchmark-compare {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin-top: 1.5rem;
+        }
+
+        .benchmark-side {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 6px;
+        }
+
+        .benchmark-arrow {
+            font-size: 2rem;
+            color: var(--accent);
+            padding: 0 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1 style="margin: 0;">Transformation Engineering Command Center</h1>
+            <div id="last-updated" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;"></div>
+        </div>
+        <div id="executive-badge"></div>
+    </header>
+
+    <div id="content" class="container" style="display: none;">
+        <!-- Executive Summary -->
+        <div class="card full-width">
+            <h2>Executive Engineering Status</h2>
+            <div class="stat-grid" id="exec-grid">
+                <!-- Javascript will populate this -->
+            </div>
+            <p id="health-reason" style="margin-top: 1rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.9rem;"></p>
+        </div>
+
+        <!-- System Architecture -->
+        <div class="card">
+            <h2>System & Portfolio Overview</h2>
+            <table id="projects-table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Quality & CI -->
+        <div class="card">
+            <h2>Quality & CI View</h2>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="quality-coverage">--</div>
+                    <div class="stat-label">Coverage</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="quality-tests">--</div>
+                    <div class="stat-label">Tests Passed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="quality-lint">--</div>
+                    <div class="stat-label">Lint/Sec</div>
+                </div>
+            </div>
+            <div id="quality-badges" style="margin-top: 1.5rem;"></div>
+            <div id="quality-limitations" class="limitations"></div>
+        </div>
+
+        <!-- Transformation Results -->
+        <div class="card full-width">
+            <h2>Transformation Results (Project 3)</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                <strong>Bottleneck:</strong> Global database lock via sequential ID generation.<br>
+                <strong>Intervention:</strong> Scalable Identifying Entropy (UUIDv4) resolution.<br>
+            </p>
+
+            <div class="benchmark-compare">
+                <div class="benchmark-side">
+                    <h3 style="color: var(--fail);">Baseline</h3>
+                    <div class="stat-grid" style="grid-template-columns: 1fr;">
+                        <div>
+                            <div class="stat-value" id="base-fail" style="color: var(--fail);">--</div>
+                            <div class="stat-label">Failures / 100 requests</div>
+                        </div>
+                        <div>
+                            <div class="stat-value" id="base-dur">--s</div>
+                            <div class="stat-label">Duration</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benchmark-arrow">➔</div>
+
+                <div class="benchmark-side">
+                    <h3 style="color: var(--success);">Transformed</h3>
+                    <div class="stat-grid" style="grid-template-columns: 1fr;">
+                        <div>
+                            <div class="stat-value" id="trans-fail" style="color: var(--success);">--</div>
+                            <div class="stat-label">Failures / 100 requests</div>
+                        </div>
+                        <div>
+                            <div class="stat-value" id="trans-dur">--s</div>
+                            <div class="stat-label">Duration</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="trans-limitations" class="limitations"></div>
+        </div>
+
+        <!-- Traceability -->
+        <div class="card full-width">
+            <h2>Requirements Traceability (Project 4)</h2>
+            <div class="stat-grid" style="margin-bottom: 1.5rem;">
+                <div class="stat-box">
+                    <div class="stat-value" id="req-total">--</div>
+                    <div class="stat-label">Total Requirements</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="req-covered">--</div>
+                    <div class="stat-label">Fully Evidenced</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="req-missing">--</div>
+                    <div class="stat-label">Missing Evidence</div>
+                </div>
+            </div>
+
+            <table id="req-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Implementation</th>
+                        <th>Test</th>
+                        <th>Benchmark</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="loading" class="loading">
+        Loading engineering evidence...
+    </div>
+
+    <script>
+        async function loadDashboard() {
+            try {
+                const res = await fetch('dashboard-data.json');
+                if (!res.ok) throw new Error('Failed to fetch dashboard data');
+                const data = await res.json();
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'grid';
+
+                // Timestamp
+                document.getElementById('last-updated').innerText = 'Data Generated: ' + new Date(data.generated_at).toLocaleString();
+
+                // Executive Status
+                const exec = data.executive_status;
+                document.getElementById('executive-badge').innerHTML = `<span class="badge status-${exec.health}">SYS Health: ${exec.health}</span>`;
+
+                const execGrid = document.getElementById('exec-grid');
+                execGrid.innerHTML = `
+                    <div class="stat-box">
+                        <div class="stat-value">${exec.version}</div>
+                        <div class="stat-label">Release Version</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" style="font-family: monospace;">${exec.commit.substring(0,7)}</div>
+                        <div class="stat-label">Commit (${exec.branch})</div>
+                    </div>
+                `;
+                document.getElementById('health-reason').innerText = exec.health_reason;
+
+                // Projects
+                const projTbody = document.querySelector('#projects-table tbody');
+                data.projects.forEach(p => {
+                    projTbody.innerHTML += `
+                        <tr>
+                            <td><strong>${p.id}: ${p.name}</strong></td>
+                            <td style="color: var(--text-muted);">${p.description}</td>
+                            <td><span class="badge status-${p.status}">${p.status}</span></td>
+                        </tr>
+                    `;
+                });
+
+                // Quality & CI
+                const q = data.quality_ci;
+                document.getElementById('quality-coverage').innerText = q.test_coverage ? `${q.test_coverage.toFixed(2)}%` : 'N/A';
+                document.getElementById('quality-tests').innerText = q.test_passed ? 'PASS' : 'FAIL';
+                document.getElementById('quality-lint').innerText = (q.lint_passed && q.security_passed) ? 'CLEAN' : 'WARN';
+
+                if (q.ci_workflows && q.ci_workflows.length > 0) {
+                    const badges = q.ci_workflows.map(w => `<img src="${w.badge_url}" alt="${w.name}" style="height: 20px;">`).join(' ');
+                    document.getElementById('quality-badges').innerHTML = badges;
+                }
+
+                if (q.limitations && q.limitations.length > 0) {
+                    document.getElementById('quality-limitations').innerText = q.limitations.join(' ');
+                } else {
+                    document.getElementById('quality-limitations').style.display = 'none';
+                }
+
+                // Transformation
+                const t = data.transformation;
+                if (t.baseline) {
+                    document.getElementById('base-fail').innerText = t.baseline.failures;
+                    document.getElementById('base-dur').innerText = t.baseline.duration.toFixed(2) + 's';
+                }
+                if (t.transformed) {
+                    document.getElementById('trans-fail').innerText = t.transformed.failures;
+                    document.getElementById('trans-dur').innerText = t.transformed.duration.toFixed(2) + 's';
+                }
+                if (t.limitations && t.limitations.length > 0) {
+                    document.getElementById('trans-limitations').innerText = t.limitations.join(' ');
+                }
+
+                // Traceability
+                const r = data.traceability;
+                document.getElementById('req-total').innerText = r.total_requirements;
+                document.getElementById('req-covered').innerText = r.covered_requirements;
+                document.getElementById('req-missing').innerText = r.missing_evidence;
+
+                const reqTbody = document.querySelector('#req-table tbody');
+                r.requirements.forEach(req => {
+                    const check = (val) => val ? '<span style="color:var(--success);">✓</span>' : '<span style="color:var(--fail);">✗</span>';
+                    reqTbody.innerHTML += `
+                        <tr>
+                            <td style="font-family: monospace;">${req.id}</td>
+                            <td>${req.title}</td>
+                            <td>${check(req.has_implementation)}</td>
+                            <td>${check(req.has_test)}</td>
+                            <td>${check(req.has_benchmark)}</td>
+                            <td><span class="badge status-${req.covered ? 'PASS' : 'DEGRADED'}">${req.covered ? 'EVIDENCED' : 'INCOMPLETE'}</span></td>
+                        </tr>
+                    `;
+                });
+
+            } catch (error) {
+                document.getElementById('loading').innerHTML = `
+                    <div style="color: var(--fail);">
+                        <h3>Error Loading Dashboard Evidence</h3>
+                        <p>${error.message}</p>
+                        <p>Ensure <code>build_command_center.py</code> has been run and <code>dashboard-data.json</code> is accessible.</p>
+                    </div>
+                `;
+            }
+        }
+
+        window.onload = loadDashboard;
+    </script>
+</body>
+</html>

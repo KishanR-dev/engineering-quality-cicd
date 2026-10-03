@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Transformation Engineering Command Center Evidence Model",
+  "type": "object",
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when this evidence was aggregated"
+    },
+    "project_context": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "commit": { "type": ["string", "null"] },
+        "branch": { "type": ["string", "null"] },
+        "latest_tag": { "type": ["string", "null"] }
+      },
+      "required": ["version"]
+    },
+    "quality_metrics": {
+      "type": "object",
+      "properties": {
+        "test_status": {
+          "type": "string",
+          "enum": ["PASS", "FAIL", "UNKNOWN", "STALE"]
+        },
+        "test_count": { "type": ["number", "null"] },
+        "coverage_percent": { "type": ["number", "null"] },
+        "lint_status": {
+          "type": "string",
+          "enum": ["PASS", "FAIL", "UNKNOWN", "STALE"]
+        },
+        "security_status": {
+          "type": "string",
+          "enum": ["PASS", "FAIL", "UNKNOWN", "STALE"]
+        }
+      }
+    },
+    "ci_cd": {
+      "type": "object",
+      "properties": {
+        "workflow_status": { "type": ["string", "null"] },
+        "docker_build_status": { "type": ["string", "null"] },
+        "last_workflow_run_at": { "type": ["string", "null"] },
+        "render_deployment_status": { "type": ["string", "null"] }
+      }
+    },
+    "transformation": {
+      "type": "object",
+      "properties": {
+        "baseline": {
+          "type": "object",
+          "properties": {
+            "duration": { "type": "number" },
+            "successes": { "type": "number" },
+            "failures": { "type": "number" }
+          }
+        },
+        "transformed": {
+          "type": "object",
+          "properties": {
+            "duration": { "type": "number" },
+            "successes": { "type": "number" },
+            "failures": { "type": "number" }
+          }
+        }
+      }
+    },
+    "traceability": {
+      "type": "object",
+      "properties": {
+        "total_requirements": { "type": "number" },
+        "covered_requirements": { "type": "number" },
+        "details": {
+          "type": "array",
+          "items": { "type": "object" }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["generated_at", "project_context", "quality_metrics", "transformation", "traceability"]
+}
