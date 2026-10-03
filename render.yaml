@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: engineering-quality-cicd
+    env: docker
+    region: ohio
+    plan: free
+    branch: master
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
