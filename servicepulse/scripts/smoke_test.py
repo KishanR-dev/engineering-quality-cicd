@@ -144,7 +144,7 @@ def run_smoke_tests(base_url: str) -> int:
     # 4. Service Request Lifecycle
     print("\n--- [Phase 4] Service Request Contract Execution ---")
     req_payload = {
-        "customer_id": "CUST-SMOKE-01",
+        "customer_id": "CUST-999",
         "request_type": "SERVICE",
         "description": "Smoke test automated request",
     }
