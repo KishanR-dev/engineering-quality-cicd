@@ -13,9 +13,9 @@
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](#containerization--smoke-testing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-🔗 **[Live Demo on Hugging Face Spaces](https://huggingface.co/spaces/KishanR-dev/engineering-quality-cicd)** · 📖 **[API Documentation](/api/v1/docs)**
+🔗 **[Live Demo State: Unavailable]** · 📖 **[API Documentation](/api/v1/docs)**
 
-> **Note:** Hugging Face Spaces uses a Gradio interactive interface for public demonstration. Full OpenAPI/Swagger documentation is available when running locally at `/api/v1/docs` or `/docs`.
+> **Note:** Hugging Face Docker and Gradio deployment on the `cpu-basic` hardware tier requires a PRO subscription. The project remains fully containerized and can be deployed to any compatible Docker host.
 
 ---
 
@@ -177,14 +177,14 @@ As part of Project 2 engineering verification, a controlled defect scenario was 
 - **Scenario:** Inadvertent regression allowing transition from terminal `COMPLETED` state.
 - **Detection:** Caught automatically at CI test gate with zero false positives.
 - **Remediation:** Fix applied to domain logic + permanent regression test added.
-- **Documentation:** See [Controlled CI Failure Demo](servicepulse/docs/controlled-ci-failure-demo.md).
+- **Documentation:** See [Controlled CI Failure Demo](docs/controlled-ci-failure-demo.md).
 
 ---
 
 ## Project Structure
 
 ```text
-servicepulse/
+.
 ├── .github/
 │   ├── dependabot.yml              # Automated dependency updates
 │   └── workflows/
@@ -221,20 +221,19 @@ servicepulse/
 ```bash
 # 1. Clone repository
 git clone https://github.com/KishanR-dev/engineering-quality-cicd.git
-cd servicepulse
 
 # 2. Create virtual environment
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # 3. Install development dependencies
-pip install -r servicepulse/requirements-dev.txt
+pip install -r requirements-dev.txt
 
 # 4. Run local validation suite
 python scripts/run_checks.py all
 
 # 5. Start development server
-cd servicepulse && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ---
@@ -243,14 +242,14 @@ cd servicepulse && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 | Document | Purpose |
 |---|---|
-| [requirements.md](servicepulse/docs/requirements.md) | Functional and non-functional requirements |
-| [architecture.md](servicepulse/docs/architecture.md) | System architecture, layers, and data flow |
-| [api-design.md](servicepulse/docs/api-design.md) | REST API endpoints and data contracts |
-| [testing-strategy.md](servicepulse/docs/testing-strategy.md) | Test hierarchy, isolation, and coverage policy |
-| [controlled-ci-failure-demo.md](servicepulse/docs/controlled-ci-failure-demo.md) | Controlled failure & RCA demonstration |
-| [traceability-matrix.md](servicepulse/docs/traceability-matrix.md) | Requirement → Implementation → Test → CI mapping |
-| [observability.md](servicepulse/docs/observability.md) | Structured logging and Prometheus metrics |
-| [troubleshooting.md](servicepulse/docs/troubleshooting.md) | Operational triage procedures |
+| [requirements.md](docs/requirements.md) | Functional and non-functional requirements |
+| [architecture.md](docs/architecture.md) | System architecture, layers, and data flow |
+| [api-design.md](docs/api-design.md) | REST API endpoints and data contracts |
+| [testing-strategy.md](docs/testing-strategy.md) | Test hierarchy, isolation, and coverage policy |
+| [controlled-ci-failure-demo.md](docs/controlled-ci-failure-demo.md) | Controlled failure & RCA demonstration |
+| [traceability-matrix.md](docs/traceability-matrix.md) | Requirement → Implementation → Test → CI mapping |
+| [observability.md](docs/observability.md) | Structured logging and Prometheus metrics |
+| [troubleshooting.md](docs/troubleshooting.md) | Operational triage procedures |
 
 ---
 
