@@ -13,7 +13,7 @@
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](#containerization--smoke-testing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-🔗 **[Live Demo on Hugging Face Spaces](https://huggingface.co/spaces/KishanR-dev/servicepulse)** · 📖 **[API Documentation](/api/v1/docs)**
+🔗 **[Live Demo on Hugging Face Spaces](https://huggingface.co/spaces/KishanR-dev/engineering-quality-cicd)** · 📖 **[API Documentation](/api/v1/docs)**
 
 > **Note:** Hugging Face Spaces uses a Gradio interactive interface for public demonstration. Full OpenAPI/Swagger documentation is available when running locally at `/api/v1/docs` or `/docs`.
 
@@ -220,7 +220,7 @@ servicepulse/
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/KishanR-dev/servicepulse.git
+git clone https://github.com/KishanR-dev/engineering-quality-cicd.git
 cd servicepulse
 
 # 2. Create virtual environment
