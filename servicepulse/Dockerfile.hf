@@ -1,0 +1,38 @@
+# Hugging Face Spaces Dockerfile for ServicePulse
+# Based on the official HF FastAPI template
+
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application
+COPY app ./app
+COPY pyproject.toml .
+
+# Create data directory for SQLite
+RUN mkdir -p /app/data
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PORT=7860
+ENV APP_ENV=production
+ENV FAILURE_SIMULATION_ENABLED=false
+ENV DATABASE_URL=sqlite:////app/data/servicepulse.db
+
+# Expose the HF default port
+EXPOSE 7860
+
+# Run the application
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]

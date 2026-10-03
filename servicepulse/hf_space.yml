@@ -1,0 +1,29 @@
+# Hugging Face Spaces configuration
+# https://huggingface.co/docs/hub/spaces-overview
+
+name: ServicePulse
+description: Production Operations & Incident Management Platform
+
+# Docker-based space configuration
+sdk: docker
+
+# Required files for the space
+files:
+  - Dockerfile.hf
+  - requirements.txt
+  - app.py
+  - app/
+  - pyproject.toml
+
+# Environment variables (override in HF Spaces UI for sensitive values)
+environment:
+  APP_ENV: production
+  FAILURE_SIMULATION_ENABLED: false
+  DATABASE_URL: sqlite:////app/data/servicepulse.db
+  PORT: 7860
+
+# Resource requirements
+hardware: cpu-basic
+
+# Visibility
+visibility: public
