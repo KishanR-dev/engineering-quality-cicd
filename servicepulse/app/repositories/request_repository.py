@@ -50,8 +50,3 @@ class RequestRepository:
         self.db.commit()
         self.db.refresh(model)
         return model
-
-    def next_request_id(self) -> str:
-        """Generate the next sequential request ID."""
-        max_id = self.db.query(func.max(ServiceRequestModel.id)).scalar() or 0
-        return f"REQ-{max_id + 1:06d}"

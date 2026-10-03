@@ -52,7 +52,3 @@ class IncidentRepository:
         self.db.commit()
         self.db.refresh(model)
         return model
-
-    def next_incident_id(self) -> str:
-        max_id = self.db.query(func.max(IncidentModel.id)).scalar() or 0
-        return f"INC-{max_id + 1:06d}"

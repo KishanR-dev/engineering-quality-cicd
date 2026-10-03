@@ -1,5 +1,6 @@
 """Service layer for incident lifecycle operations."""
 
+import uuid
 from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
@@ -22,7 +23,7 @@ class IncidentService:
 
     def create_incident(self, data: CreateIncidentSchema) -> IncidentModel:
         """Create a new incident with status OPEN."""
-        incident_id = self.repo.next_incident_id()
+        incident_id = f"INC-{uuid.uuid4().hex[:8].upper()}"
 
         model = IncidentModel(
             incident_id=incident_id,

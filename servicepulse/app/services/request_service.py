@@ -4,6 +4,7 @@ Orchestrates domain logic, persistence, logging, and metrics.
 Business logic lives here — not in route handlers or repositories.
 """
 
+import uuid
 from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
@@ -26,7 +27,7 @@ class RequestService:
 
     def create_request(self, data: CreateRequestSchema) -> ServiceRequestModel:
         """Create a new service request with status RECEIVED."""
-        request_id = self.repo.next_request_id()
+        request_id = f"REQ-{uuid.uuid4().hex[:8].upper()}"
 
         model = ServiceRequestModel(
             request_id=request_id,
