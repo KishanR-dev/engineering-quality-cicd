@@ -11,7 +11,9 @@
 [![Ruff](https://img.shields.io/badge/linting-ruff-orange.svg)](https://docs.astral.sh/ruff/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-🔗 **[Live Demo on Hugging Face Spaces](https://huggingface.co/spaces/KishanR-dev/servicepulse)** · 📖 **[API Documentation](https://huggingface.co/spaces/KishanR-dev/servicepulse/docs)**
+🔗 **[Live Demo on Hugging Face Spaces](https://huggingface.co/spaces/KishanR-dev/servicepulse)** · 📖 **[API Documentation](/api/v1/docs)**
+
+> **Note:** Hugging Face Spaces uses a Gradio interface for the demo. The full FastAPI OpenAPI docs are available when running locally at `/api/v1/docs`.
 
 ---
 
@@ -269,15 +271,27 @@ The Docker image uses a multi-stage build, runs as non-root, and is configurable
 
 ## Hugging Face Spaces (Live Demo)
 
-ServicePulse is deployed as a public demo on Hugging Face Spaces:
+ServicePulse is deployed as a public demo on Hugging Face Spaces using Gradio:
 
-🔗 **https://huggingface.co/spaces/KishanR-dev/servicepulse**
+🔗 **[https://huggingface.co/spaces/KishanR-dev/servicepulse](https://huggingface.co/spaces/KishanR-dev/servicepulse)**
 
-The deployed instance:
-- Runs in `production` mode (failure simulation disabled)
-- Uses SQLite for ephemeral data storage
-- Resets on container restart (demo data is not persistent)
-- Exposes the full API for interactive exploration
+The Gradio interface provides interactive access to:
+
+| Feature | Description |
+|---|---|
+| **Request Management** | Create, list, get, and update service requests |
+| **Incident Creation** | Create and track operational incidents |
+| **Health Check** | System status and component health |
+| **Metrics** | Prometheus-compatible metrics endpoint |
+| **Test Workflow** | One-click demo of full request lifecycle |
+
+### Technical Details
+
+The Spaces deployment uses:
+- **Gradio** for the web interface (free-tier compatible)
+- **FastAPI** for the underlying API logic
+- **SQLite** for ephemeral data storage (resets on restart)
+- **Production mode** enabled (failure simulation disabled)
 
 > **Note:** This is a portfolio demonstration. The deployed instance does not process real customer requests or connect to production systems.
 
@@ -287,7 +301,8 @@ The deployed instance:
 
 | Layer | Technology |
 |---|---|
-| Framework | FastAPI 0.115 |
+| API Framework | FastAPI 0.115 |
+| Web Interface | Gradio 6.26 |
 | Python | 3.12+ |
 | Database | SQLite (dev/demo) / PostgreSQL (production-ready) |
 | ORM | SQLAlchemy 2.0 |

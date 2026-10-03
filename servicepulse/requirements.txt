@@ -1,3 +1,6 @@
+# ServicePulse Requirements
+# Core application dependencies
+
 fastapi==0.115.12
 uvicorn[standard]==0.34.3
 pydantic==2.11.4
@@ -12,3 +15,6 @@ httpx==0.28.1
 
 # Code quality
 ruff==0.11.12
+
+# Hugging Face Spaces deployment
+gradio==6.26.0
