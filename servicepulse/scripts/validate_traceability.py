@@ -34,7 +34,16 @@ def validate_traceability(json_path: str, repo_root: str) -> bool:
         seen_ids.add(req_id)
 
         # Check required fields
-        required_fields = ["type", "title", "description", "acceptance_criteria", "components", "implementation_refs", "test_refs", "status"]
+        required_fields = [
+            "type",
+            "title",
+            "description",
+            "acceptance_criteria",
+            "components",
+            "implementation_refs",
+            "test_refs",
+            "status",
+        ]
         for field in required_fields:
             if field not in record:
                 print(f"ERROR: Requirement {req_id} missing required field '{field}'")
@@ -62,6 +71,7 @@ def validate_traceability(json_path: str, repo_root: str) -> bool:
     else:
         print("FAILURE: Traceability validation errors detected.")
         return False
+
 
 if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))

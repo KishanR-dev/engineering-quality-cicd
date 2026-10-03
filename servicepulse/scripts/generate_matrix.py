@@ -2,6 +2,7 @@ import json
 import os
 import sys
 
+
 def generate_matrix():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     repo_root = os.path.abspath(os.path.join(current_dir, ".."))
@@ -12,7 +13,7 @@ def generate_matrix():
         print(f"Error: Could not find {json_path}")
         sys.exit(1)
 
-    with open(json_path, "r") as f:
+    with open(json_path) as f:
         records = json.load(f)
 
     fr_records = [r for r in records if r.get("type") == "functional"]
@@ -21,7 +22,9 @@ def generate_matrix():
     with open(matrix_path, "w") as f:
         f.write("# ServicePulse — Traceability Matrix\n")
         f.write("**Projects 1–4 — Engineering Traceability & CI/CD Verification**\n\n")
-        f.write("> Automatically generated from canonical `traceability.json` to prevent drift.\n\n")
+        f.write(
+            "> Automatically generated from canonical `traceability.json` to prevent drift.\n\n"
+        )
         f.write("---\n\n")
 
         f.write("## 1. Functional Requirements (FR)\n\n")
@@ -46,6 +49,7 @@ def generate_matrix():
             f.write(f"| **{r['id']}** | {r['title']} | {comps} | {impls} | {tests} | {cis} |\n")
 
     print(f"Successfully generated {matrix_path}")
+
 
 if __name__ == "__main__":
     generate_matrix()
