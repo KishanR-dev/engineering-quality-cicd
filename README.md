@@ -50,7 +50,7 @@ ServicePulse forms the foundation of a five-project Transformation Engineering p
 | **1** | **ServicePulse Core** | Operations & Incident Management Platform | ✅ Released (`v1.0.0`) |
 | **2** | **Engineering Quality & CI/CD** | Automated QA, Security, Docker, Quality Gates, Release | ✅ Released (`v1.1.0`) |
 | **3** | **Transformation Engineering** | Concurrency optimization, RCA & scalable UUIDs | ✅ Released |
-| **4** | Requirements Engineering | Traceability Case Study (Reqs → Design → Code → Tests) | 📋 Planned |
+| **4** | **Requirements Engineering** | Traceability Case Study (Reqs → Design → Code → Tests) | ✅ Released |
 | **5** | Transformation Command Center | Unified Engineering & Operations Dashboard | 📋 Planned |
 
 ---
@@ -258,6 +258,8 @@ cd servicepulse && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 | [controlled-ci-failure-demo.md](servicepulse/docs/controlled-ci-failure-demo.md) | Controlled failure & RCA demonstration |
 | [traceability-matrix.md](servicepulse/docs/traceability-matrix.md) | Requirement → Implementation → Test → CI mapping |
 | [PROJECT3_TRANSFORMATION.md](servicepulse/docs/PROJECT3_TRANSFORMATION.md) | Project 3 Execution, Traceability, Benchmark metrics |
+| [PROJECT4_REQUIREMENTS_TRACEABILITY.md](servicepulse/docs/PROJECT4_REQUIREMENTS_TRACEABILITY.md) | Project 4 Requirements Traceability Case Study |
+| [traceability.json](servicepulse/docs/traceability/traceability.json) | Central machine-readable traceability matrix artifact |
 | [RCA_001_concurrent_id_generation.md](servicepulse/docs/RCA_001_concurrent_id_generation.md) | Root Cause Analysis of Concurrency Bottleneck |
 | [observability.md](servicepulse/docs/observability.md) | Structured logging and Prometheus metrics |
 | [troubleshooting.md](servicepulse/docs/troubleshooting.md) | Operational triage procedures |

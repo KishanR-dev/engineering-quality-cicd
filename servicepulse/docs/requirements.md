@@ -214,3 +214,23 @@ The application shall be runnable via Docker and Docker Compose.
 ## 4. Traceability
 
 See [Traceability Matrix](traceability-matrix.md) for requirement-to-implementation mapping.
+
+### FR-011 — Scalable Identifying Entropy (Transformation)
+
+The system shall independently generate request and incident IDs using a high entropy shorter UUID strategy avoiding sequential database querying.
+Ids must remain capped within legacy string constraints (e.g., 20 characters).
+
+**Status:** Implemented (Project 3 Transformation)
+**API:** `POST /api/v1/requests`, `POST /api/v1/incidents`
+**Tests:** `test_uuid_generation`, `test_request_creation_stress`
+
+---
+
+### NFR-013 — High Concurrency Write Resiliency
+
+The system must sustain simultaneous request writes globally under high concurrency without Database locking constraints or transaction conflicts (e.g., `sqlite3.IntegrityError`). Specifically, a benchmark of 50 concurrent requests must execute with 0% failure rate.
+
+**Status:** Implemented (Project 3 Transformation)
+**Validation:** `benchmarks/benchmark_concurrency_after.py`
+
+---

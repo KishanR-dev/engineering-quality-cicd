@@ -1,0 +1,255 @@
+[
+  {
+    "id": "FR-001",
+    "type": "functional",
+    "title": "Create Service Request",
+    "description": "The system shall allow a client to create a service request with customer_id, request_type, and description.",
+    "acceptance_criteria": [
+      "endpoint returns defined status/schema (200 with request_id)",
+      "initial status is RECEIVED"
+    ],
+    "components": ["API Layer", "Service Layer"],
+    "implementation_refs": ["app/api/routes/requests.py", "app/services/request_service.py"],
+    "test_refs": ["tests/api/test_requests.py"],
+    "ci_checks": ["pytest", "coverage", "ruff", "bandit", "pip-audit"],
+    "evidence_refs": ["docs/requirements.md", "scripts/smoke_test.py"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-002",
+    "type": "functional",
+    "title": "Validate Input",
+    "description": "The system shall validate all incoming service request payloads and reject invalid data with 422.",
+    "acceptance_criteria": [
+      "missing required fields respond with 422",
+      "invalid customer_id responds with 422"
+    ],
+    "components": ["API Layer"],
+    "implementation_refs": ["app/schemas/request.py", "app/api/routes/requests.py"],
+    "test_refs": ["tests/unit/test_validation.py"],
+    "ci_checks": ["pytest", "coverage", "ruff", "bandit"],
+    "evidence_refs": ["docs/requirements.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-003",
+    "type": "functional",
+    "title": "Persist Requests",
+    "description": "The system shall persist service requests in a relational database through a repository pattern.",
+    "acceptance_criteria": [
+      "Request saves to SQLite database correctly",
+      "Persistence is abstracted through repository"
+    ],
+    "components": ["Repository Layer", "Database"],
+    "implementation_refs": ["app/repositories/request_repository.py", "app/db/models.py"],
+    "test_refs": ["tests/integration/test_end_to_end.py"],
+    "ci_checks": ["pytest", "coverage", "ruff"],
+    "evidence_refs": ["docs/requirements.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-004",
+    "type": "functional",
+    "title": "Retrieve Request",
+    "description": "The system shall allow retrieval of a single service request by its ID.",
+    "acceptance_criteria": [
+      "endpoint returns 200 with request payload",
+      "endpoint returns 404 if request not found"
+    ],
+    "components": ["API Layer", "Service Layer"],
+    "implementation_refs": ["app/api/routes/requests.py", "app/services/request_service.py"],
+    "test_refs": ["tests/api/test_requests.py"],
+    "ci_checks": ["pytest", "coverage", "smoke test"],
+    "evidence_refs": ["docs/requirements.md", "scripts/smoke_test.py"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-005",
+    "type": "functional",
+    "title": "List Requests",
+    "description": "The system shall allow listing service requests with pagination support.",
+    "acceptance_criteria": [
+      "endpoint returns an array of requests",
+      "pagination skip and limit work as expected"
+    ],
+    "components": ["API Layer", "Service Layer"],
+    "implementation_refs": ["app/api/routes/requests.py", "app/services/request_service.py"],
+    "test_refs": ["tests/api/test_requests.py"],
+    "ci_checks": ["pytest", "coverage", "ruff"],
+    "evidence_refs": ["docs/requirements.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-006",
+    "type": "functional",
+    "title": "Update Request Status",
+    "description": "The system shall allow controlled status transitions following the defined state machine.",
+    "acceptance_criteria": [
+      "valid transitions succeed with 200",
+      "invalid transitions are rejected with HTTP 409"
+    ],
+    "components": ["Domain Layer", "Service Layer"],
+    "implementation_refs": ["app/domain/request.py", "app/api/routes/requests.py"],
+    "test_refs": ["tests/unit/test_state_machine.py", "tests/regression/test_regression_suite.py"],
+    "ci_checks": ["pytest", "coverage"],
+    "evidence_refs": ["docs/requirements.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-007",
+    "type": "functional",
+    "title": "Incident Management",
+    "description": "The system shall support a complete incident lifecycle (create, investigate, mitigate).",
+    "acceptance_criteria": [
+      "incident creates successfully",
+      "incident status transitions through mitigations"
+    ],
+    "components": ["Service Layer", "Domain Layer"],
+    "implementation_refs": ["app/services/incident_service.py", "app/domain/incident.py"],
+    "test_refs": ["tests/api/test_incidents.py", "tests/integration/test_end_to_end.py"],
+    "ci_checks": ["pytest", "coverage", "smoke test"],
+    "evidence_refs": ["docs/requirements.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-008",
+    "type": "functional",
+    "title": "Health Check",
+    "description": "The system shall expose a health endpoint reporting status of the app and dependencies.",
+    "acceptance_criteria": [
+      "endpoint returns 200 OK with 'healthy' status"
+    ],
+    "components": ["API Layer"],
+    "implementation_refs": ["app/api/routes/health.py"],
+    "test_refs": ["tests/api/test_health.py"],
+    "ci_checks": ["pytest", "smoke test", "docker healthcheck"],
+    "evidence_refs": ["docs/requirements.md", "Dockerfile"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-009",
+    "type": "functional",
+    "title": "Metrics",
+    "description": "The system shall expose Prometheus-compatible application metrics.",
+    "acceptance_criteria": [
+      "endpoint returns prometheus plain text metrics",
+      "JSON metrics correctly track counts"
+    ],
+    "components": ["Core Infrastructure"],
+    "implementation_refs": ["app/core/metrics.py", "app/api/routes/metrics.py"],
+    "test_refs": ["tests/api/test_metrics.py"],
+    "ci_checks": ["pytest", "coverage"],
+    "evidence_refs": ["docs/requirements.md", "scripts/smoke_test.py"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-010",
+    "type": "functional",
+    "title": "Failure Simulation",
+    "description": "Development-only mechanism to simulate failures for testing, securely gated.",
+    "acceptance_criteria": [
+      "failure injected when simulation enabled",
+      "feature inert and safe if ENVIRONMENT!=development"
+    ],
+    "components": ["Service Layer"],
+    "implementation_refs": ["app/services/processing_service.py"],
+    "test_refs": ["tests/failure/test_failure_simulation.py", "tests/regression/test_regression_suite.py"],
+    "ci_checks": ["pytest", "coverage", "bandit"],
+    "evidence_refs": ["docs/requirements.md", "docs/controlled-ci-failure-demo.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "FR-011",
+    "type": "functional",
+    "title": "Scalable Identifying Entropy",
+    "description": "The system shall independently generate request IDs using a high entropy shorter UUID strategy capped under legacy constraints.",
+    "acceptance_criteria": [
+      "generated ID is unique without synchronous blocking",
+      "IDs adhere to REQ-XXXXXXXX string constraint"
+    ],
+    "components": ["Service Layer"],
+    "implementation_refs": ["app/services/request_service.py", "app/services/incident_service.py"],
+    "test_refs": ["tests/api/test_requests.py"],
+    "ci_checks": ["pytest", "coverage", "ruff", "bandit"],
+    "evidence_refs": ["docs/RCA_001_concurrent_id_generation.md", "docs/PROJECT3_TRANSFORMATION.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "NFR-001",
+    "type": "non-functional",
+    "title": "Structured Logging",
+    "description": "All events logged in structured JSON format with correlation IDs.",
+    "acceptance_criteria": [
+      "Logs output in JSON dictionary format",
+      "Logs contain trace/correlation identifiers"
+    ],
+    "components": ["Core Infrastructure"],
+    "implementation_refs": ["app/core/logging.py"],
+    "test_refs": [],
+    "ci_checks": ["ruff"],
+    "evidence_refs": ["docs/observability.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "NFR-002",
+    "type": "non-functional",
+    "title": "Correlation IDs",
+    "description": "Every API request assigned a unique correlation ID via middleware.",
+    "acceptance_criteria": [
+      "X-Correlation-ID is observed and propagated"
+    ],
+    "components": ["Core Infrastructure", "API Layer"],
+    "implementation_refs": ["app/main.py"],
+    "test_refs": ["tests/regression/test_regression_suite.py"],
+    "ci_checks": ["pytest", "coverage"],
+    "evidence_refs": ["docs/observability.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "NFR-006",
+    "type": "non-functional",
+    "title": "Test Isolation",
+    "description": "Architecture must support highly isolated tests without external dependencies.",
+    "acceptance_criteria": [
+      "tests complete with zero state leakage",
+      "SQLite in-memory allows 0 setup external db"
+    ],
+    "components": ["Testing"],
+    "implementation_refs": ["tests/conftest.py"],
+    "test_refs": ["tests/conftest.py"],
+    "ci_checks": ["pytest"],
+    "evidence_refs": ["docs/testing-strategy.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "NFR-011",
+    "type": "non-functional",
+    "title": "Production Containerization",
+    "description": "Multi-stage Dockerfile and unprivileged appuser.",
+    "acceptance_criteria": [
+      "docker image builds successfully",
+      "container executes under UID 1000 (appuser)"
+    ],
+    "components": ["Deployment"],
+    "implementation_refs": ["Dockerfile"],
+    "test_refs": ["scripts/smoke_test.py"],
+    "ci_checks": ["docker build", "docker run"],
+    "evidence_refs": ["../README.md"],
+    "status": "implemented"
+  },
+  {
+    "id": "NFR-013",
+    "type": "non-functional",
+    "title": "High Concurrency Write Resiliency",
+    "description": "System must sustain simultaneous request writes without Database locking or transaction conflicts.",
+    "acceptance_criteria": [
+      "Benchmark of 50 concurrent requests executes with 0% failure rate"
+    ],
+    "components": ["Service Layer", "Performance"],
+    "implementation_refs": ["app/services/request_service.py"],
+    "test_refs": ["benchmarks/benchmark_concurrency_after.py"],
+    "ci_checks": [],
+    "evidence_refs": ["docs/PROJECT3_TRANSFORMATION.md", "benchmarks/transformed_results.json"],
+    "status": "implemented"
+  }
+]
