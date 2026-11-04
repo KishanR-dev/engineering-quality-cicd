@@ -8,6 +8,7 @@
 [![Ruff](https://img.shields.io/badge/linting-ruff-orange.svg)](https://docs.astral.sh/ruff/)
 [![Security: Bandit & pip-audit](https://img.shields.io/badge/security-passed-brightgreen.svg)](#security--supply-chain)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](#containerization--smoke-testing)
+[![Demo](brag-output/brag.jpg)](brag-output/brag.mp4)
 
 🔗 **[Live API Documentation & Demo](https://engineering-quality-cicd-dhlf.onrender.com/docs)**
 

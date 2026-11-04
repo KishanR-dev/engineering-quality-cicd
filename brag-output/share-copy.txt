@@ -1,0 +1,1 @@
+Engineered for absolute reliability: ServicePulse Project 2 delivers 83 deterministic tests, 94.62% code coverage, zero-tolerance Ruff linting, Bandit SAST, pip-audit scanning, and containerized CI/CD smoke gates.

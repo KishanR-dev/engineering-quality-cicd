@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --ground: #0f172a;
+        --surface: #1e293b;
+        --accent: #22c55e;
+        --accent-glow: rgba(34, 197, 94, 0.3);
+        --ink: #f8fafc;
+        --muted: #94a3b8;
+        --font-display: 'Inter', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--ground);
+        color: var(--ink);
+        font-family: var(--font-display);
+      }
+      #root {
+        width: 1920px;
+        height: 1080px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 70%);
+      }
+      .scene {
+        position: absolute;
+        width: 1920px;
+        height: 1080px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        padding: 100px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 32px;
+        background: rgba(34, 197, 94, 0.15);
+        border: 2px solid var(--accent);
+        border-radius: 9999px;
+        color: var(--accent);
+        font-family: var(--font-mono);
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        box-shadow: 0 0 30px var(--accent-glow);
+      }
+      h1 {
+        font-size: 84px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        text-align: center;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        color: var(--ink);
+      }
+      p {
+        font-size: 36px;
+        color: var(--muted);
+        text-align: center;
+        max-width: 1300px;
+        line-height: 1.5;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        width: 100%;
+        max-width: 1550px;
+        margin-top: 40px;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      }
+      .card-title {
+        font-family: var(--font-mono);
+        font-size: 28px;
+        color: var(--accent);
+        font-weight: 700;
+      }
+      .card-value {
+        font-size: 56px;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .card-desc {
+        font-size: 28px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="20"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Scene 1: Hook (0s - 4s) -->
+      <div id="scene-1" class="clip scene" data-start="0" data-duration="4" data-track-index="0" style="opacity: 1;">
+        <div id="badge-1" class="badge">🚀 SERVICEPULSE PROJECT 2</div>
+        <h1 id="title-1">Engineering Quality & CI/CD</h1>
+        <p id="desc-1">Production-grade automated pipelines, quality gates, and remote delivery infrastructure.</p>
+      </div>
+
+      <!-- Scene 2: Test Gates & Coverage (4s - 9s) -->
+      <div id="scene-2" class="clip scene" data-start="4" data-duration="5" data-track-index="1" data-hold>
+        <div id="badge-2" class="badge">✓ QUALITY GATES VERIFIED</div>
+        <h1 id="title-2">Deterministic Test Suite & Coverage</h1>
+        <div class="grid">
+          <div id="card-1" class="card">
+            <div class="card-title">PYTEST SUITE</div>
+            <div class="card-value">83 / 83</div>
+            <div class="card-desc">Passed unit, API & integration tests</div>
+          </div>
+          <div id="card-2" class="card">
+            <div class="card-title">STATEMENT COVERAGE</div>
+            <div class="card-value">94.62%</div>
+            <div class="card-desc">Enforced via pytest-cov (>= 85%)</div>
+          </div>
+          <div id="card-3" class="card">
+            <div class="card-title">EXECUTION TIME</div>
+            <div class="card-value">3.61s</div>
+            <div class="card-desc">Fast local verification cycle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 3: Security & CI Pipeline (9s - 15s) -->
+      <div id="scene-3" class="clip scene" data-start="9" data-duration="6" data-track-index="2" data-hold>
+        <div id="badge-3" class="badge">🛡️ SECURITY & SAST AUDIT</div>
+        <h1 id="title-3">Zero Vulnerabilities & Strict Linting</h1>
+        <div class="grid">
+          <div id="card-4" class="card">
+            <div class="card-title">RUFF LINT & FORMAT</div>
+            <div class="card-value">Passed</div>
+            <div class="card-desc">Zero tolerance static quality</div>
+          </div>
+          <div id="card-5" class="card">
+            <div class="card-title">PIP-AUDIT & BANDIT</div>
+            <div class="card-value">Clean</div>
+            <div class="card-desc">Zero vulnerabilities & AST issues</div>
+          </div>
+          <div id="card-6" class="card">
+            <div class="card-title">DOCKER SMOKE TEST</div>
+            <div class="card-value">Ready</div>
+            <div class="card-desc">Multi-stage build & HTTP check</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 4: Outro (15s - 20s) -->
+      <div id="scene-4" class="clip scene" data-start="15" data-duration="5" data-track-index="3" data-hold>
+        <div id="badge-4" class="badge">🌟 TRANSFORMATION ENGINEERING PORTFOLIO</div>
+        <h1 id="title-4">Production Ready Delivery Layer</h1>
+        <p id="desc-4">engineering-quality-cicd repository fully verified and synchronized.</p>
+      </div>
+
+      <!-- Audio Track -->
+      <audio
+        id="bg-music"
+        src="assets/music/happy-beats-business-moves-vol-1-by-ende-dot-app.mp3"
+        data-start="0"
+        data-duration="20"
+        data-volume="0.3"
+      ></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // Scene 1
+      tl.fromTo("#scene-1", { opacity: 1, scale: 1 }, { opacity: 1, scale: 1.03, duration: 3.5, ease: "none" }, 0)
+        .to("#scene-1", { opacity: 0, scale: 1.08, duration: 0.5, ease: "power2.in" }, 3.5);
+
+      // Scene 2
+      tl.fromTo("#scene-2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 4.0)
+        .to("#scene-2", { opacity: 0, y: -30, duration: 0.5, ease: "power2.in" }, 8.5);
+
+      // Scene 3
+      tl.fromTo("#scene-3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 9.0)
+        .to("#scene-3", { opacity: 0, y: -30, duration: 0.5, ease: "power2.in" }, 14.5);
+
+      // Scene 4
+      tl.fromTo("#scene-4", { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }, 15.0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
