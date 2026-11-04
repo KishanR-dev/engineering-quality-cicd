@@ -2,8 +2,9 @@
 
 > Part of the [Transformation Engineering Portfolio](https://github.com/KishanR-dev/servicepulse). This standalone repository hosts the remote delivery layer, CI/CD pipelines, and configuration metrics for the ServicePulse backend system. 
 
-[![Tests](https://img.shields.io/badge/tests-78%20passed-green.svg)](#testing--quality-gates)
-[![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing--quality-gates)
+[![CI](https://github.com/KishanR-dev/engineering-quality-cicd/actions/workflows/ci.yml/badge.svg)](https://github.com/KishanR-dev/engineering-quality-cicd/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-83%20passed-green.svg)](#testing--quality-gates)
+[![Coverage](https://img.shields.io/badge/coverage-94.62%25-brightgreen.svg)](#testing--quality-gates)
 [![Ruff](https://img.shields.io/badge/linting-ruff-orange.svg)](https://docs.astral.sh/ruff/)
 [![Security: Bandit & pip-audit](https://img.shields.io/badge/security-passed-brightgreen.svg)](#security--supply-chain)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](#containerization--smoke-testing)
@@ -26,8 +27,8 @@ This project (`engineering-quality-cicd`) acts as the dedicated CI/CD and Qualit
 
 | Capability | Implementation |
 |---|---|
-| **Testing & Quality** | 78 deterministic tests across Unit, API, Integration, Failure, and Regression |
-| **Code Coverage** | **94.65%** statement coverage enforced by CI quality gates (`--cov-fail-under=85`) |
+| **Testing & Quality** | 83 deterministic tests across Unit, API, Integration, Failure, and Regression |
+| **Code Coverage** | **94.62%** statement coverage enforced by CI quality gates (`--cov-fail-under=85`) |
 | **Static Analysis** | Ruff linting and formatting enforced with zero tolerance |
 | **Security & SAST** | Automated `pip-audit` dependency scanning and `bandit` AST checks |
 | **Containerization** | Multi-stage Docker build with non-root user and automated HTTP smoke test suite |
